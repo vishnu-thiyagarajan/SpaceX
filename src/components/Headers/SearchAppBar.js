@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
+import {HistoryContext, PayloadContext} from '../App';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -64,7 +64,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchAppBar() {
   const classes = useStyles();
-
+  const {dispatchHistory} = useContext(HistoryContext);
+  const {dispatchPayload} = useContext(PayloadContext);
+  const search = (event)=>{
+    if (event.target.value) {
+      dispatchHistory({type:'search', key: event.target.value})
+      dispatchPayload({type:'search', key: event.target.value})
+      return
+    }
+    dispatchHistory({type:'reset'})
+    dispatchPayload({type:'reset'})
+  }
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -85,6 +95,7 @@ export default function SearchAppBar() {
             </div>
             <InputBase
               placeholder="Search…"
+              onChange={search}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,

@@ -103,13 +103,13 @@ export default function TableHistory() {
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.payload_id}>
                     <TableCell>
                     <ol>
-                        {Object.keys(row.orbit_params).map((key)=>{
+                        {Object.keys(row.orbit_params).map((key,index)=>{
                             if(row.orbit_params[key]){
                                 return (
-                                    <li>{key} : {row.orbit_params[key]}</li>
+                                    <li key={""+row.payload_id+index+key}>{key} : {row.orbit_params[key]}</li>
                                 )
                             }
-                            return (<></>)
+                            return (<div key={""+row.payload_id+index+key}></div>)
                         })}
                     </ol>
                   </TableCell>
